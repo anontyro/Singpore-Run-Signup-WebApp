@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+
+
+<body>
+
+<div class="main-image  text-center">
+
+  		<img class = "img-responsive " src="https://raceagainstcancer.org.sg/images/headertext-09.png?crc=4205000900">
+
+
+  		<img class = "img-responsive " src="https://raceagainstcancer.org.sg/images/headertext-10.png?crc=4175908676">
+
+</div>
+
+<div class="countdown-container">
+  <p class="clock">
+    <span class="clock-block">
+      <span class="clock-val day-clock"></span>
+      <span class="clock-unit">Days</span>
+    </span>
+    <span class="clock-block">
+      <span class="clock-val day-hours">10</span>
+      <span class="clock-unit">Hours</span>
+    </span>
+      <span class="clock-block">
+      <span class="clock-val day-mins">08</span>
+      <span class="clock-unit">Minutes</span>
+    </span>
+      <span class="clock-block">
+      <span class="clock-val day-secs">08</span>
+      <span class="clock-unit">Seconds</span>
+    </span>
+  </p> 
+</div>
+
+<div class="join-control-container offset-xs-6">
+  
+  <div class="join-button-toggle">
+    <button class="btn btn-warning animated" onclick="onJoinRace()">Join The Race</button>
+  </div>
+  <div class="join-form animated">
+    <form onsubmit="#">
+      <input type="text" class="form-control" id="form-name" name="username" placeholder="Name">
+      <select class="form-control" id="form-distance">
+        <option value="5">5KM</option>
+        <option value ="10">10KM</option>
+        <option value="15">15KM</option>
+      </select>
+      <div class="sub-btn">
+        <button type="button" value="Join" class="btn btn-warning " onclick="onSubmit();">Join</button>
+      </div>
+    </form>
+  </div>
+  
+</div>
+  
+<div class="runner-list-container">
+  <div class="runners-header text-center"><h2>RUNNERS SIGNED UP</h2></div>
+  <ul class=" horizlist text-center" id="runner-list">
+    <li>
+      Cras justo odio
+    </li>
+    <li>
+      Cras justo odio
+    </li>
+    <li>
+      Cras justo odio
+    </li>
+    <li>
+      Cras justo odio
+    </li>
+    <li>
+      Cras justo odio
+    </li>
+  </ul>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>  
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
