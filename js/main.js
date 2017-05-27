@@ -1,5 +1,5 @@
 let raceDate = new Date("Jul 30, 2017 07:00:00").getTime();
-const runnerList = [["TEST","5"]];
+const runnerList = [];
 
 //
 const onJoinRace = () =>{
@@ -25,17 +25,19 @@ const onSubmit = () =>{
   }
   
   addRunner(name, distance);
+  addRunnerToDb(name,distance);
   
   formMainExit();
-
   
 }
 
+//
 const addRunner = (name, distance) =>{
     runnerList.push([name,distance]);
   $("#runner-list").append("<li>"+name+" \( "+distance+" KM \) </li>");
 }
 
+//
 const formMainExit = () =>{
   $(".join-button-toggle").removeClass("form-displayed");  
   $(".join-form").addClass("bounceOutRight");
@@ -61,9 +63,43 @@ const checkIfUserJoined = (username) =>{
   
 }
 
+//
 const showForParticipating = () =>{
   $(".join-button-toggle").css("display", "none");
   formMainExit();
+}
+
+//
+const addRunnerToDb = (username, distance) =>{
+  $.get(
+    "/singcancerrunsignup/php/servercalls.php?username="+username+
+    "&distance="+distance);
+}
+
+//
+const getRunnersFromDb = (callback) =>{
+
+  $.get("/singcancerrunsignup/php/servercalls.php", function(data){
+    console.log(data);
+    let valueFromDb = JSON.parse(data);
+    if(callback) callback(valueFromDb);
+  })
+
+}
+
+//
+const seedPage = () =>{
+
+  getRunnersFromDb(function(runnerList){
+
+    for(let i = 0; i < runnerList.length; i++){
+      if(!checkIfUserJoined(runnerList[i].username)){
+         addRunner(runnerList[i].username, runnerList[i].distance);
+
+      }
+    }
+  })
+
 }
 
 //
