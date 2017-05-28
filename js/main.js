@@ -1,22 +1,11 @@
 let raceDate = new Date("Jul 30, 2017 07:00:00").getTime();
 const runnerList = [];
 
-//
-const onJoinRace = () =>{
-  
-  $(".join-button-toggle").addClass("form-displayed");  
-  $(".join-form").addClass("bounceInLeft");
-  $(".join-form").css("display", "inherit");
-  $('.join-form').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-  $(".join-form").removeClass("bounceInLeft");
-  });
-
-}
-
-//
+//when the user adds themselve into the race this method fires. firstly it takes the data from the form and converts
+//to uppercase then it checks to see if it already exists in the page if so it will hide the button to join, else it will
+//allow them to add to the page and database.
 const onSubmit = () =>{
-  let name = $("#form-name").val();
-  name = name.toUpperCase();
+  let name = $("#form-name").val().toUpperCase();
   const distance = $("#form-distance").val();
   
   if(checkIfUserJoined(name)){
@@ -31,13 +20,26 @@ const onSubmit = () =>{
   
 }
 
-//
-const addRunner = (name, distance) =>{
-    runnerList.push([name,distance]);
-  $("#runner-list").append("<li>"+name+" \( "+distance+" KM \) </li>");
+//animation that brings in the form from the side
+const onJoinRace = () =>{  
+
+  if($(".join-form").css("display") === "none"){
+
+    $(".join-button-toggle").addClass("form-displayed");  
+    $(".join-form").addClass("bounceInLeft");
+    $(".join-form").css("display", "inherit");
+    $('.join-form').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+    $(".join-form").removeClass("bounceInLeft");
+    });
+
+  }else{
+    formMainExit();
+  }
+
+
 }
 
-//
+//animation controls for the form exit
 const formMainExit = () =>{
   $(".join-button-toggle").removeClass("form-displayed");  
   $(".join-form").addClass("bounceOutRight");
@@ -47,7 +49,19 @@ const formMainExit = () =>{
       });
 }
 
-//
+//animations for the Join The Race button to hide for users already participating
+const showForParticipating = () =>{
+  $(".join-button-toggle").addClass("bounceOutRight");
+  $(".join-button-toggle").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+    
+    $(".join-button-toggle").css("display", "none");
+
+  });
+  formMainExit();
+}
+
+//All added users are added into the globle runnerList[] as [name,distance] this method checks through the array
+// if it finds the same user added already then it will return true if they are in the array of false if they are not
 const checkIfUserJoined = (username) =>{
   let inArray = 1;
   for(let i = 0; i < runnerList.length;i++){
@@ -55,31 +69,35 @@ const checkIfUserJoined = (username) =>{
         inArray = -1;
         break;
       }
-  }
-  console.log("In array? "+ (inArray=== -1) );
-  
+  }  
   if(inArray === -1){ return true;}
   return false;
   
 }
 
-//
-const showForParticipating = () =>{
-  $(".join-button-toggle").css("display", "none");
-  formMainExit();
+//valids to ensure that the user has not been added to the database yet.
+const preCheckUserAdded = () =>{
+
+  const user = $("#form-name").val();
+  if( checkIfUserJoined(user) ){
+    showForParticipating();
+  }
+
 }
 
-//
+//Create a new runner in the database by calling the PHP function page, requires both the username
+//and distance they will run. it does take an option race which will default to Cancer Run
 const addRunnerToDb = (username, distance) =>{
   $.get(
-    "/singcancerrunsignup/php/servercalls.php?username="+username+
+    "/js/runnerTracker/php/servercalls.php?username="+username+
     "&distance="+distance);
 }
 
-//
+//Returns a JSON array from the database table with all the values
+//this is used to read all the times from the database to be added to the page
 const getRunnersFromDb = (callback) =>{
 
-  $.get("/singcancerrunsignup/php/servercalls.php", function(data){
+  $.get("/js/runnerTracker/php/servercalls.php", function(data){
     console.log(data);
     let valueFromDb = JSON.parse(data);
     if(callback) callback(valueFromDb);
@@ -87,7 +105,15 @@ const getRunnersFromDb = (callback) =>{
 
 }
 
-//
+//helper method that is chained with others, this method just adds a runner with no validation that is done elsewhere
+//this method should never be called on its own
+const addRunner = (name, distance) =>{
+    runnerList.push([name,distance]);
+  $("#runner-list").append("<li>"+name+" \( "+distance+" KM \) </li>");
+}
+
+//inital call to the database to pull all of the data, it also runs a check to ensure
+//that the page does not currently have that runner displaying
 const seedPage = () =>{
 
   getRunnersFromDb(function(runnerList){
@@ -102,7 +128,8 @@ const seedPage = () =>{
 
 }
 
-//
+//function that runs as soon as the page loads to start the countdown timer for the race
+//adds to be displayed correctly
 let x = setInterval(function(){
   
   const now = new Date().getTime();

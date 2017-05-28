@@ -15,7 +15,7 @@ img{
   margin: auto;
 }
 .main-image{
-  margin-top: 20px;
+  margin-top: 60px;
 }
 .join-button-toggle{
   width: 20%;
@@ -37,7 +37,7 @@ img{
 .runners-header{
     color: rgb(228, 32, 46);
     background-color: white;
-    width: 30%;
+    width: 50%;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
